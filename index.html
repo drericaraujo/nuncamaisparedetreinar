@@ -1616,18 +1616,11 @@
       salesContent.querySelectorAll('.evo-row').forEach(el => observer.observe(el));
     }
   }
-
-  // Vturb: detecta fim do vídeo
-  document.addEventListener("vturb:ended", function(e) {
-    if (e.detail && e.detail.playerId === "vid-69e7926ea8ce2d72e1d4f2fb") {
-      unlockSalesContent();
-    }
-  });
-
+  
   // Delay de 8 minutos: libera a página mesmo que o vídeo não tenha terminado
   setTimeout(function() {
-    unlockSalesContent();
-  }, 8 * 60 * 1000);
+  unlockSalesContent();
+}, 510000);
 </script>
 
 </body>
