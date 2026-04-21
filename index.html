@@ -1627,5 +1627,30 @@
     unlockSalesContent();
   }, 8 * 60 * 1000);
 </script>
+  <script>
+document.addEventListener("DOMContentLoaded", function() {
+
+  document.body.style.overflow = "hidden";
+
+  function liberarConteudo() {
+    document.getElementById("sales-content").style.display = "block";
+    document.getElementById("vsl-lock-msg").style.display = "none";
+    document.body.style.overflow = "auto";
+  }
+
+  const checkPlayer = setInterval(() => {
+    const player = document.querySelector("vturb-smartplayer");
+
+    if (player && player.player) {
+      clearInterval(checkPlayer);
+
+      player.player.on("ended", function() {
+        liberarConteudo();
+      });
+    }
+  }, 500);
+
+});
+</script>
 </body>
 </html>
