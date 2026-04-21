@@ -1,21 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR"><!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '2420379008407213');
-fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=2420379008407213&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Meta Pixel Code -->
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1049,7 +1033,7 @@ src="https://www.facebook.com/tr?id=2420379008407213&ev=PageView&noscript=1"
 <!-- ════════════════════════════════════
      HERO
 ════════════════════════════════════ -->
-<section id="hero">
+<section id="hero" style="display:none;">
   <div class="container">
     <p class="hero-eyebrow">Método BASE</p>
     <h1 class="hero-title">
@@ -1076,9 +1060,18 @@ src="https://www.facebook.com/tr?id=2420379008407213&ev=PageView&noscript=1"
     <p class="video-sub fade-in">O vídeo revela o sistema que muda tudo</p>
 
     <div class="video-wrapper fade-in">
-      <iframe src="https://www.youtube.com/embed/tf4gYsi2vic?rel=0&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"></iframe>
+      <iframe id="yt-player" src="https://www.youtube.com/embed/tf4gYsi2vic?rel=0&modestbranding=1&enablejsapi=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"></iframe>
     </div>
 
+
+    <!-- Mensagem de desbloqueio (visível antes do fim do vídeo) -->
+    <div id="vsl-lock-msg" style="text-align:center; margin-top:40px; padding:32px 24px; border:1px solid var(--gold-border); max-width:720px; margin-left:auto; margin-right:auto; background:var(--dark2);">
+      <p style="font-family:var(--font-display); font-size:1.2rem; color:var(--gold); margin-bottom:8px; font-style:italic;">Assista ao vídeo até o fim</p>
+      <p style="font-size:0.88rem; color:var(--white-dim);">O conteúdo completo da oferta será revelado quando o vídeo terminar.</p>
+    </div>
+
+    <!-- CONTEÚDO BLOQUEADO -->
+    <div id="sales-content" style="display:none;">
     <div class="video-bullets">
       <div class="video-bullet fade-in">
         <span class="video-bullet-num">1</span>
@@ -1531,6 +1524,7 @@ src="https://www.facebook.com/tr?id=2420379008407213&ev=PageView&noscript=1"
   <span class="footer-brand">BASE</span>
   <p class="footer-text">© 2025 Método BASE · Todos os direitos reservados</p>
 </footer>
+</div><!-- /#sales-content -->
 
 <!-- ════════════════════════════════════
      STICKY BAR
@@ -1588,6 +1582,52 @@ src="https://www.facebook.com/tr?id=2420379008407213&ev=PageView&noscript=1"
       stickyBar.classList.remove('visible');
     }
   });
+
+  // ── VSL Gate: revela conteúdo ao fim do vídeo
+  function unlockSalesContent() {
+    const lockMsg = document.getElementById('vsl-lock-msg');
+    const salesContent = document.getElementById('sales-content');
+    const heroSection = document.getElementById('hero');
+    if (lockMsg) {
+      lockMsg.style.transition = 'opacity 0.5s ease';
+      lockMsg.style.opacity = '0';
+      setTimeout(() => lockMsg.style.display = 'none', 500);
+    }
+    if (heroSection) {
+      heroSection.style.display = 'flex';
+      heroSection.style.opacity = '0';
+      heroSection.style.transition = 'opacity 0.8s ease';
+      setTimeout(() => heroSection.style.opacity = '1', 50);
+    }
+    if (salesContent) {
+      salesContent.style.display = 'block';
+      salesContent.style.opacity = '0';
+      salesContent.style.transition = 'opacity 0.8s ease';
+      setTimeout(() => salesContent.style.opacity = '1', 50);
+      salesContent.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+      salesContent.querySelectorAll('.evo-row').forEach(el => observer.observe(el));
+    }
+  }
+
+  // YouTube IFrame API
+  var ytPlayer;
+  window.onYouTubeIframeAPIReady = function() {
+    ytPlayer = new YT.Player('yt-player', {
+      events: {
+        'onStateChange': function(event) {
+          if (event.data === YT.PlayerState.ENDED) {
+            unlockSalesContent();
+          }
+        }
+      }
+    });
+  };
+  (function() {
+    var tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+  })();
 </script>
 </body>
 </html>
