@@ -1621,6 +1621,11 @@
       unlockSalesContent();
     }
   });
+
+  // Delay de 8 minutos: libera a página mesmo que o vídeo não tenha terminado
+  setTimeout(function() {
+    unlockSalesContent();
+  }, 8 * 60 * 1000);
 </script>
 </body>
 </html>
